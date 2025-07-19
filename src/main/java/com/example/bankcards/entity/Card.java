@@ -1,6 +1,7 @@
 package com.example.bankcards.entity;
 
 import com.example.bankcards.entity.enums.CardStatus;
+import com.example.bankcards.util.CardNumberConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
