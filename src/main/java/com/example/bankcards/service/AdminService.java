@@ -6,6 +6,7 @@ import com.example.bankcards.dto.UserDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.entity.enums.CardStatus;
+import com.example.bankcards.entity.enums.Role;
 import com.example.bankcards.exception.CardOperationException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
@@ -87,6 +88,34 @@ public class AdminService {
                 .map(this::mapToUserDto)
                 .orElseThrow(() -> new CardOperationException(String.format("User not found with id: %d", userId)));
     }
+
+    @Transactional
+    public UserDto updateUserRole(Long userId, Role newRole) {
+        log.info("Admin updating role for user ID #{} to {}", userId, newRole);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CardOperationException(String.format("User not found with id: %d", userId)));
+
+        user.setRole(newRole);
+        userRepository.save(user);
+
+        log.info("Successfully updated role for user ID #{}", userId);
+        return mapToUserDto(user);
+    }
+
+    @Transactional
+    public UserDto updateUserLockStatus(Long userId, boolean locked) {
+        String status = locked ? "locking" : "unlocking";
+        log.info("Admin {} user ID #{}", status, userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CardOperationException(String.format("User not found with id: %d", userId)));
+
+        user.setLocked(locked);
+        userRepository.save(user);
+
+        log.info("Successfully updated lock status for user ID #{}", userId);
+        return mapToUserDto(user);
+    }
+
 
     private UserDto mapToUserDto(User user) {
         return new UserDto(

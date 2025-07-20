@@ -3,6 +3,8 @@ package com.example.bankcards.controller;
 import com.example.bankcards.dto.AdminCardCreateRequestDto;
 import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.dto.UserDto;
+import com.example.bankcards.dto.UserLockStatusUpdateRequestDto;
+import com.example.bankcards.dto.UserRoleUpdateRequestDto;
 import com.example.bankcards.entity.enums.CardStatus;
 import com.example.bankcards.service.AdminService;
 import jakarta.validation.Valid;
@@ -59,5 +61,15 @@ public class AdminController {
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(adminService.getUserById(id));
+    }
+
+    @PatchMapping("/users/{id}/role")
+    public ResponseEntity<UserDto> updateUserRole(@PathVariable Long id, @Valid @RequestBody UserRoleUpdateRequestDto request) {
+        return ResponseEntity.ok(adminService.updateUserRole(id, request.newRole()));
+    }
+
+    @PatchMapping("/users/{id}/lock-status")
+    public ResponseEntity<UserDto> updateUserLockStatus(@PathVariable Long id, @RequestBody UserLockStatusUpdateRequestDto request) {
+        return ResponseEntity.ok(adminService.updateUserLockStatus(id, request.locked()));
     }
 }

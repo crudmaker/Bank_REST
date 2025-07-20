@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: locked
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

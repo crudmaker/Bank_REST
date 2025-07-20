@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: db/changelog/changeset/bank_V001_initial.yaml
+  - include:
+      file: db/changelog/changeset/bank_V002_add_locked_column_to_user.yaml
