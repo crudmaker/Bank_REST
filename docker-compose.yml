@@ -8,7 +8,7 @@
 #  - Открыть нужные порты (например, 5432, 8080).
 #  - Настроить volume для хранения данных БД.
 
-version: '3.8'
+#version: '3.8'
 
 services:
   postgres-db:
@@ -22,6 +22,12 @@ services:
       - POSTGRES_PASSWORD=password
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d card_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
 
   app:
     container_name: card-app
@@ -29,7 +35,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - postgres-db
+      postgres-db:
+        condition: service_healthy
 
 volumes:
   postgres-data:
