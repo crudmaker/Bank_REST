@@ -31,17 +31,17 @@ public class AdminService {
     public CardDto createCard(AdminCardCreateRequestDto request) {
         log.info("Admin creating card for user ID #{}", request.userId());
 
-        var user = userRepository.findById(request.userId())
-                .orElseThrow(() -> new CardOperationException("User not found with id: " + request.userId()));
+        User user = userRepository.findById(request.userId())
+                .orElseThrow(() -> new CardOperationException(String.format("User not found with id: %d", request.userId())));
 
-        var card = new Card();
+        Card card = new Card();
         card.setUser(user);
         card.setCardNumber(request.cardNumber());
         card.setExpiryDate(request.expiryDate());
         card.setBalance(request.initialBalance());
-        card.setStatus(CardStatus.ACTIVE); // Новые карты сразу активны
+        card.setStatus(CardStatus.ACTIVE);
 
-        var savedCard = cardRepository.save(card);
+        Card savedCard = cardRepository.save(card);
         log.info("Successfully created card ID #{} for user ID #{}", savedCard.getId(), user.getId());
 
         return cardService.mapToCardDto(savedCard);
@@ -56,11 +56,11 @@ public class AdminService {
     public CardDto updateCardStatus(Long cardId, CardStatus newStatus) {
         log.info("Admin updating status for card ID #{} to {}", cardId, newStatus);
 
-        var card = cardRepository.findById(cardId)
-                .orElseThrow(() -> new CardOperationException("Card not found with id: " + cardId));
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new CardOperationException(String.format("Card not found with id: %d", cardId)));
 
         card.setStatus(newStatus);
-        var updatedCard = cardRepository.save(card);
+        Card updatedCard = cardRepository.save(card);
         log.info("Successfully updated status for card ID #{}", updatedCard.getId());
 
         return cardService.mapToCardDto(updatedCard);
@@ -70,7 +70,7 @@ public class AdminService {
     public void deleteCard(Long cardId) {
         log.info("Admin deleting card ID #{}", cardId);
         if (!cardRepository.existsById(cardId)) {
-            throw new CardOperationException("Card not found with id: " + cardId);
+            throw new CardOperationException(String.format("Card not found with id: %d", cardId));
         }
         cardRepository.deleteById(cardId);
         log.info("Successfully deleted card ID #{}", cardId);
@@ -85,7 +85,7 @@ public class AdminService {
         log.info("Admin fetching user by ID #{}", userId);
         return userRepository.findById(userId)
                 .map(this::mapToUserDto)
-                .orElseThrow(() -> new CardOperationException("User not found with id: " + userId));
+                .orElseThrow(() -> new CardOperationException(String.format("User not found with id: %d", userId)));
     }
 
     private UserDto mapToUserDto(User user) {

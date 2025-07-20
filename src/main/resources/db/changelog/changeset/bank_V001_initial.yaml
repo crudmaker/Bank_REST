@@ -1,7 +1,6 @@
 databaseChangeLog:
   - changeSet:
       id: 1
-      author: programmer_partner
       changes:
         - createTable:
             tableName: users
@@ -46,7 +45,7 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: card_number # Будет хранить зашифрованную строку
+                  name: card_number
                   type: VARCHAR(255)
                   constraints:
                     unique: true

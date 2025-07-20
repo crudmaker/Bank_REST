@@ -5,6 +5,7 @@ import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.dto.UserDto;
 import com.example.bankcards.entity.enums.CardStatus;
 import com.example.bankcards.service.AdminService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +30,7 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("/cards")
-    public ResponseEntity<CardDto> createCard(@RequestBody AdminCardCreateRequestDto request) {
+    public ResponseEntity<CardDto> createCard(@Valid @RequestBody AdminCardCreateRequestDto request) {
         var createdCard = adminService.createCard(request);
         return new ResponseEntity<>(createdCard, HttpStatus.CREATED);
     }

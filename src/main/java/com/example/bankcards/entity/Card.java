@@ -29,7 +29,7 @@ public class Card {
     private Long id;
 
     @Column(name = "card_number", nullable = false, unique = true)
-    @Convert(converter = CardNumberConverter.class) // Применяем наш шифровальщик
+    @Convert(converter = CardNumberConverter.class)
     private String cardNumber;
 
     @Column(name = "expiry_date", nullable = false)
