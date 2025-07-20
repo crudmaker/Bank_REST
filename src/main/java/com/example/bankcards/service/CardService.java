@@ -49,7 +49,7 @@ public class CardService {
         log.info("Card ID #{} was successfully blocked by user '{}'", cardId, user.getUsername());
     }
 
-    private CardDto mapToCardDto(Card card) {
+    public CardDto mapToCardDto(Card card) {
         return new CardDto(
                 card.getId(),
                 maskCardNumber(card.getCardNumber()),
