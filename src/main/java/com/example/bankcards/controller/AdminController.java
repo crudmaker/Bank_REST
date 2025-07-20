@@ -2,6 +2,7 @@ package com.example.bankcards.controller;
 
 import com.example.bankcards.dto.AdminCardCreateRequestDto;
 import com.example.bankcards.dto.CardDto;
+import com.example.bankcards.dto.UserDto;
 import com.example.bankcards.entity.enums.CardStatus;
 import com.example.bankcards.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin")
@@ -40,5 +48,15 @@ public class AdminController {
     public ResponseEntity<Void> deleteCard(@PathVariable Long id) {
         adminService.deleteCard(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<Page<UserDto>> getAllUsers(Pageable pageable) {
+        return ResponseEntity.ok(adminService.getAllUsers(pageable));
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(adminService.getUserById(id));
     }
 }

@@ -2,7 +2,9 @@ package com.example.bankcards.service;
 
 import com.example.bankcards.dto.AdminCardCreateRequestDto;
 import com.example.bankcards.dto.CardDto;
+import com.example.bankcards.dto.UserDto;
 import com.example.bankcards.entity.Card;
+import com.example.bankcards.entity.User;
 import com.example.bankcards.entity.enums.CardStatus;
 import com.example.bankcards.exception.CardOperationException;
 import com.example.bankcards.repository.CardRepository;
@@ -72,5 +74,26 @@ public class AdminService {
         }
         cardRepository.deleteById(cardId);
         log.info("Successfully deleted card ID #{}", cardId);
+    }
+
+    public Page<UserDto> getAllUsers(Pageable pageable) {
+        log.info("Admin fetching all users, page request: {}", pageable);
+        return userRepository.findAll(pageable).map(this::mapToUserDto);
+    }
+
+    public UserDto getUserById(Long userId) {
+        log.info("Admin fetching user by ID #{}", userId);
+        return userRepository.findById(userId)
+                .map(this::mapToUserDto)
+                .orElseThrow(() -> new CardOperationException("User not found with id: " + userId));
+    }
+
+    private UserDto mapToUserDto(User user) {
+        return new UserDto(
+                user.getId(),
+                user.getUsername(),
+                user.getOwnerName(),
+                user.getRole()
+        );
     }
 }
