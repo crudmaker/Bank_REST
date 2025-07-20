@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "users")
-@Data
 public class User implements UserDetails {
 
     @Id

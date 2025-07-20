@@ -19,9 +19,9 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+@Data
 @Entity
 @Table(name = "cards")
-@Data
 public class Card {
 
     @Id

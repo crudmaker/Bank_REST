@@ -28,8 +28,12 @@ spring:
 # 3. Настройки безопасности и JWT (пока это заготовки)
 app:
   jwt:
-    secret: "ThisIsAFakeButVeryLongAndSecureSecretKeyForYourJWTs" # Секретный ключ (замени на свой)
-    expiration-ms: 86400000 # Срок жизни токена в миллисекундах (24 часа)
+    secret: "9dXn1yP0eP7M4uPvvUqhvHqQ5eG3rb6TgTgF3KxQ1nq7wYFf1JgJ4M4n2qE5n6s1v8QyY4a1Lr9b0c2d3e4f5g6h7i8j9k0l"
+    expiration-ms: 300000
+
+  masking:
+    card-number-visible-digits: 4
+    card-number-mask-char: '*'
 
 springdoc:
   swagger-ui:
