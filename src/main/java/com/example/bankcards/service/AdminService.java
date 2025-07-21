@@ -116,7 +116,6 @@ public class AdminService {
         return mapToUserDto(user);
     }
 
-
     private UserDto mapToUserDto(User user) {
         return new UserDto(
                 user.getId(),

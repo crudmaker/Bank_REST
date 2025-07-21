@@ -25,6 +25,8 @@ services:
     depends_on:
       postgres-db:
         condition: service_healthy
+    environment:
+      - ENCRYPTION_KEY=1234567890123456
 
 volumes:
   postgres-data:

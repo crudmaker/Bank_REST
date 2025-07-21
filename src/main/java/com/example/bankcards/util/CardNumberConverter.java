@@ -2,27 +2,26 @@ package com.example.bankcards.util;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.util.Base64;
 
-@Converter
+@Component
+@Converter(autoApply = true)
 public class CardNumberConverter implements AttributeConverter<String, String> {
 
     private static final String ALGORITHM = "AES/ECB/PKCS5Padding";
-
-    // Ключ шифрования. В реальном проекте он должен быть надежно защищен
-    // и загружаться из безопасного хранилища (Vault) или переменных окружения.
     private final Key key;
     private final Cipher cipher;
 
-    public CardNumberConverter() {
-        // ВАЖНО: Этот ключ приведен только для примера.
-        // Он должен быть длиной 16, 24 или 32 байта для AES.
-        // Никогда не храните ключи в коде в продакшене!
-        String secret = "ThisIsASecretKeyForAES12345678";
+    public CardNumberConverter(@Value("${app.encryption.secret}") String secret) {
+        if (secret == null || (secret.length() != 16 && secret.length() != 24 && secret.length() != 32)) {
+            throw new IllegalArgumentException("Invalid AES key length. Must be 16, 24, or 32 bytes.");
+        }
         this.key = new SecretKeySpec(secret.getBytes(), "AES");
         try {
             this.cipher = Cipher.getInstance(ALGORITHM);
@@ -33,7 +32,6 @@ public class CardNumberConverter implements AttributeConverter<String, String> {
 
     @Override
     public String convertToDatabaseColumn(String cardNumber) {
-        // Шифруем номер карты перед сохранением в БД
         if (cardNumber == null) {
             return null;
         }
@@ -47,7 +45,6 @@ public class CardNumberConverter implements AttributeConverter<String, String> {
 
     @Override
     public String convertToEntityAttribute(String dbData) {
-        // Расшифровываем номер карты при извлечении из БД
         if (dbData == null) {
             return null;
         }

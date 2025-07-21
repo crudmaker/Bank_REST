@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,6 +33,11 @@ public class TransferService {
 
         Card fromCard = findAndValidateCard(request.fromCardId(), user);
         Card toCard = findAndValidateCard(request.toCardId(), user);
+
+        if (fromCard.getExpiryDate().isBefore(LocalDate.now())) {
+            log.warn("Transfer failed: Source card #{} is expired. Expiry date: {}", fromCard.getId(), fromCard.getExpiryDate());
+            throw new CardOperationException("The source card has expired.");
+        }
 
         if (fromCard.getStatus() != CardStatus.ACTIVE) {
             log.warn("Transfer failed: Source card #{} is not active. Status: {}", fromCard.getId(), fromCard.getStatus());

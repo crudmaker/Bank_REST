@@ -1,6 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: 2
+      author: crudmaker
       changes:
         - addColumn:
             tableName: users
