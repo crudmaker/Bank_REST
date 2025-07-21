@@ -26,7 +26,7 @@ services:
       postgres-db:
         condition: service_healthy
     environment:
-      - ENCRYPTION_KEY=1234567890123456
+      - ENCRYPTION_KEY=p7sA2fG4jX9mK5hVdC1tYqR8nL3wE6zB
 
 volumes:
   postgres-data:
